@@ -122,18 +122,12 @@ public class SAML2SSOAgentFilter implements Filter {
                 samlSSOManager = new SAML2SSOManager(ssoAgentConfig);
                 if (resolver.isHttpPostBinding()) {
 
-                    boolean isPassiveAuth = ssoAgentConfig.getSAML2().isPassiveAuthn();
-                    ssoAgentConfig.getSAML2().setPassiveAuthn(false);
                     String htmlPayload = samlSSOManager.buildPostRequest(request, response, true);
-                    ssoAgentConfig.getSAML2().setPassiveAuthn(isPassiveAuth);
                     SSOAgentUtils.sendPostResponse(request, response, htmlPayload);
 
                 } else {
                     //if "SSOAgentConstants.HTTP_BINDING_PARAM" is not defined, default to redirect
-                    boolean isPassiveAuth = ssoAgentConfig.getSAML2().isPassiveAuthn();
-                    ssoAgentConfig.getSAML2().setPassiveAuthn(false);
                     String redirectUrl = samlSSOManager.buildRedirectRequest(request, true);
-                    ssoAgentConfig.getSAML2().setPassiveAuthn(isPassiveAuth);
                     response.sendRedirect(redirectUrl);
                 }
                 return;
@@ -150,14 +144,16 @@ public class SAML2SSOAgentFilter implements Filter {
                 return;
 
             } else if (resolver.isPassiveAuthnRequest()) {
-
-                samlSSOManager = new SAML2SSOManager(ssoAgentConfig);
-                boolean isPassiveAuth = ssoAgentConfig.getSAML2().isPassiveAuthn();
-                ssoAgentConfig.getSAML2().setPassiveAuthn(true);
-                String redirectUrl = samlSSOManager.buildRedirectRequest(request, false);
-                ssoAgentConfig.getSAML2().setPassiveAuthn(isPassiveAuth);
-                response.sendRedirect(redirectUrl);
-                return;
+            	try {
+            		SSOAgentConfig ssoAgentConfigTemp = ssoAgentConfig.copyFrom(ssoAgentConfig);
+            		ssoAgentConfigTemp.getSAML2().setPassiveAuthn(true);
+            		samlSSOManager = new SAML2SSOManager(ssoAgentConfigTemp);
+            		String redirectUrl = samlSSOManager.buildRedirectRequest(request, false);
+            		response.sendRedirect(redirectUrl);
+            		return;
+            	} catch (SSOAgentException e) {
+            		handleException(request, e);
+            	}
 
             } else if (resolver.isSAML2OAuth2GrantRequest()) {
 

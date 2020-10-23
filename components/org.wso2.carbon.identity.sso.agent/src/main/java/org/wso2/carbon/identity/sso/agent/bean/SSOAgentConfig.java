@@ -82,6 +82,7 @@ public class SSOAgentConfig {
     private String requestQueryParameters;
     private Boolean enableHostNameVerification = false;
     private Boolean enableSSLVerification = false;
+    private String keyStorePath;
     private InputStream keyStoreStream;
     private String keyStorePassword;
     private KeyStore keyStore;
@@ -219,6 +220,16 @@ public class SSOAgentConfig {
     public void setKeyStore(KeyStore keyStore) {
         this.keyStore = keyStore;
     }
+
+    public String getKeyStorePath() {
+
+		return keyStorePath;
+	}
+
+	public void setKeyStorePath( String keyStorePath ) {
+
+		this.keyStorePath = keyStorePath;
+	}
 
     public void initConfig(Properties properties) throws SSOAgentException {
 
@@ -552,6 +563,76 @@ public class SSOAgentConfig {
         }
     }
 
+    
+    public SSOAgentConfig copyFrom( SSOAgentConfig ssoAgentConfig ) throws SSOAgentException {
+    	
+    	SSOAgentConfig ssoAgentConfigNew = new SSOAgentConfig();
+    	
+    	ssoAgentConfigNew.privateKeyPassword = ssoAgentConfig.privateKeyPassword;
+    	ssoAgentConfigNew.privateKeyAlias = ssoAgentConfig.privateKeyAlias;
+    	ssoAgentConfigNew.idpPublicCertAlias = ssoAgentConfig.idpPublicCertAlias;
+    	ssoAgentConfigNew.keyStorePassword = ssoAgentConfig.keyStorePassword;
+    	
+    	ssoAgentConfigNew.requestQueryParameters = ssoAgentConfig.requestQueryParameters;
+    	ssoAgentConfigNew.enableSSLVerification = ssoAgentConfig.enableSSLVerification;
+    	ssoAgentConfigNew.isOpenIdLoginEnabled = ssoAgentConfig.isOpenIdLoginEnabled;
+    	ssoAgentConfigNew.isOAuth2SAML2GrantEnabled = ssoAgentConfig.isOAuth2SAML2GrantEnabled;
+    	ssoAgentConfigNew.saml2SSOURL = ssoAgentConfig.saml2SSOURL;
+    	ssoAgentConfigNew.openIdURL = ssoAgentConfig.openIdURL;
+    	ssoAgentConfigNew.oauth2SAML2GrantURL = ssoAgentConfig.oauth2SAML2GrantURL;
+    	//TODO maybe we need to copy the whole array
+    	ssoAgentConfigNew.skipURIs = ssoAgentConfig.skipURIs;
+        //TODO maybe we need to copy the whole array
+    	ssoAgentConfigNew.queryParams= ssoAgentConfig.queryParams;
+    	
+    	
+    	ssoAgentConfigNew.saml2.httpBinding= ssoAgentConfig.saml2.httpBinding;
+    	ssoAgentConfigNew.saml2.spEntityId= ssoAgentConfig.saml2.spEntityId;
+    	ssoAgentConfigNew.saml2.acsURL= ssoAgentConfig.saml2.acsURL;
+    	ssoAgentConfigNew.saml2.idPEntityId = ssoAgentConfig.saml2.idPEntityId;
+    	ssoAgentConfigNew.saml2.idPURL = ssoAgentConfig.saml2.idPURL;
+    	ssoAgentConfigNew.saml2.attributeConsumingServiceIndex = ssoAgentConfig.saml2.attributeConsumingServiceIndex;
+    	ssoAgentConfigNew.saml2.isSLOEnabled = ssoAgentConfig.saml2.isSLOEnabled;
+    	ssoAgentConfigNew.saml2.sloURL = ssoAgentConfig.saml2.sloURL;
+    	ssoAgentConfigNew.saml2.isAssertionSigned = ssoAgentConfig.saml2.isAssertionSigned;
+    	ssoAgentConfigNew.saml2.isAssertionEncrypted = ssoAgentConfig.saml2.isAssertionEncrypted;
+    	ssoAgentConfigNew.saml2.signatureValidatorImplClass = ssoAgentConfig.saml2.signatureValidatorImplClass;
+    	ssoAgentConfigNew.saml2.isRequestSigned = ssoAgentConfig.saml2.isRequestSigned;
+    	ssoAgentConfigNew.saml2.isPassiveAuthn = ssoAgentConfig.saml2.isPassiveAuthn;
+    	ssoAgentConfigNew.saml2.isForceAuthn = ssoAgentConfig.saml2.isForceAuthn;
+    	ssoAgentConfigNew.saml2.relayState = ssoAgentConfig.saml2.relayState;
+    	ssoAgentConfigNew.saml2.relayState = ssoAgentConfig.saml2.relayState;
+    	ssoAgentConfigNew.saml2.postBindingRequestHTMLPayload = ssoAgentConfig.saml2.postBindingRequestHTMLPayload;
+    	ssoAgentConfigNew.saml2.artifactResolveURL = ssoAgentConfig.saml2.artifactResolveURL;
+    	ssoAgentConfigNew.saml2.enableArtifactResolveSigning = ssoAgentConfig.saml2.enableArtifactResolveSigning;
+    	ssoAgentConfigNew.saml2.timeStampSkewInSeconds = ssoAgentConfig.saml2.timeStampSkewInSeconds;
+    	ssoAgentConfigNew.saml2.ssoAgentX509Credential = ssoAgentConfig.saml2.ssoAgentX509Credential;
+    	
+    	ssoAgentConfigNew.oauth2.tokenURL = ssoAgentConfig.oauth2.tokenURL;
+    	ssoAgentConfigNew.oauth2.clientId = ssoAgentConfig.oauth2.clientId;
+    	ssoAgentConfigNew.oauth2.clientSecret = ssoAgentConfig.oauth2.clientSecret;
+    	
+    	ssoAgentConfigNew.openId.providerURL = ssoAgentConfig.openId.providerURL;
+    	ssoAgentConfigNew.openId.returnToURL = ssoAgentConfig.openId.returnToURL;
+    	ssoAgentConfigNew.openId.isAttributeExchangeEnabled = ssoAgentConfig.openId.isAttributeExchangeEnabled;
+    	ssoAgentConfigNew.openId.isDumbModeEnabled = ssoAgentConfig.openId.isDumbModeEnabled;
+    	
+    	ssoAgentConfigNew.oidc.consumerKey = ssoAgentConfig.oidc.consumerKey;
+    	ssoAgentConfigNew.oidc.consumerSecret = ssoAgentConfig.oidc.consumerSecret;
+    	ssoAgentConfigNew.oidc.authzEndpoint = ssoAgentConfig.oidc.authzEndpoint;
+    	ssoAgentConfigNew.oidc.authzGrantType = ssoAgentConfig.oidc.authzGrantType;
+    	ssoAgentConfigNew.oidc.callBackUrl = ssoAgentConfig.oidc.callBackUrl;
+    	ssoAgentConfigNew.oidc.OIDCLogoutEndpoint = ssoAgentConfig.oidc.OIDCLogoutEndpoint;
+    	ssoAgentConfigNew.oidc.sessionIFrameEndpoint = ssoAgentConfig.oidc.sessionIFrameEndpoint;
+    	ssoAgentConfigNew.oidc.scope = ssoAgentConfig.oidc.scope;
+    	ssoAgentConfigNew.oidc.postLogoutRedirectUri = ssoAgentConfig.oidc.postLogoutRedirectUri;
+    	
+    	ssoAgentConfigNew.keyStore = readKeyStore( ssoAgentConfig.keyStorePath, ssoAgentConfig.keyStorePassword );
+    	
+    	return ssoAgentConfigNew;
+    	
+    }
+
     public void verifyConfig() throws SSOAgentException {
 
         if (isSAML2SSOLoginEnabled && saml2SSOURL == null) {
@@ -670,6 +751,46 @@ public class SSOAgentConfig {
         }
 
         try {
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(is, storePassword.toCharArray());
+            return keyStore;
+        } catch (Exception e) {
+
+            throw new org.wso2.carbon.identity.sso.agent.exception.SSOAgentException("Error while loading key store file", e);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ignored) {
+
+                    throw new org.wso2.carbon.identity.sso.agent.exception.SSOAgentException("Error while closing input stream of key store", ignored);
+                }
+            }
+        }
+    }
+
+    /**
+     * get the key store instance
+     *
+     * @param is            KeyStore InputStream
+     * @param storePassword password of key store
+     * @return KeyStore instant
+     * @throws org.wso2.carbon.identity.sso.agent.exception.SSOAgentException if fails to load key store
+     */
+    private KeyStore readKeyStore(String keyStorePath, String storePassword) throws
+                                                                               org.wso2.carbon.identity.sso.agent.exception.SSOAgentException {
+        if (storePassword == null) {
+            throw new org.wso2.carbon.identity.sso.agent.exception.SSOAgentException("KeyStore password can not be null");
+        }
+        
+        if (keyStorePath == null) {
+        	throw new org.wso2.carbon.identity.sso.agent.exception.SSOAgentException("KeyStore path can not be null");
+        }
+        
+        InputStream is = null;
+
+        try {
+        	is = new FileInputStream( keyStorePath );
             KeyStore keyStore = KeyStore.getInstance("JKS");
             keyStore.load(is, storePassword.toCharArray());
             return keyStore;

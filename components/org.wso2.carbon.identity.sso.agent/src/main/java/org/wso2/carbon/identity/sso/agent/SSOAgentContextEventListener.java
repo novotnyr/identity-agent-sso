@@ -77,6 +77,7 @@ public class SSOAgentContextEventListener implements ServletContextListener {
                     properties.getProperty(SSOAgentConstants.PRIVATE_KEY_PASSWORD).toCharArray());
 
             SSOAgentConfig config = new SSOAgentConfig();
+            config.setKeyStorePath("/WEB-INF/classes/" + certificateFileName);
             config.initConfig(properties);
             config.getSAML2().setSSOAgentX509Credential(credential);
             servletContext.setAttribute(SSOAgentConstants.CONFIG_BEAN_NAME, config);
